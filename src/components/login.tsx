@@ -29,7 +29,9 @@ const Login=()=>{
 
   return(
     <div className="h-screen flex items-center justify-center">
-      <button onClick={handleLogin} className="bg-blue-500 px-4 py-2 rounded cursor-pointer text-white">
+      <button onClick={handleLogin} 
+        className="bg-linear-to-r from-blue-500 to-blue-700 px-4 hover:opacity-70 hover:scale-110 transition duration-300 py-2 rounded cursor-pointer text-white"
+      >
         Login with Google
       </button>
     </div>
