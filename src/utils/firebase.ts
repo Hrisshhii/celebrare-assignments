@@ -2,8 +2,8 @@ import { initializeApp } from "firebase/app";
 import {getAuth,GoogleAuthProvider} from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD2UXc9ZyFLcpy18uoGSsde97hQX9uldK8",
-  authDomain: "celebrare-auth.firebaseapp.com",
+  apiKey: import.meta.env.VITE_API_KEY,
+  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
   projectId: "celebrare-auth",
   storageBucket: "celebrare-auth.firebasestorage.app",
   messagingSenderId: "129591228832",
