@@ -1,12 +1,13 @@
 
 import './App.css'
+import Login from './components/login'
 
 function App() {
 
   return (
-    <div className="text-blue-500 flex justify-center items-center h-screen text-5xl font-bold">
-      Setup
-    </div>
+    <>
+      <Login/>
+    </>
   )
 }
 
