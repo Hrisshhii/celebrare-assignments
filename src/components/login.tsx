@@ -1,8 +1,11 @@
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../utils/firebase";
 import { setWithExpiry } from "../utils/storage";
+import { useNavigate } from "react-router-dom";
 
 const Login=()=>{
+  const navigate=useNavigate();
+
   const handleLogin=async()=>{
     const result=await signInWithPopup(auth,provider);
     const user=result.user;
@@ -11,7 +14,8 @@ const Login=()=>{
       name:user.displayName,
       email:user.email,
     }
-    setWithExpiry("user",userData,TTL)
+    setWithExpiry("user",userData,TTL);
+    navigate("/dashboard")
     console.log("User saved: ",userData);
   };
 
