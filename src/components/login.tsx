@@ -1,7 +1,8 @@
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../utils/firebase";
-import { setWithExpiry } from "../utils/storage";
+import { getWithExpiry, setWithExpiry } from "../utils/storage";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const Login=()=>{
   const navigate=useNavigate();
@@ -18,6 +19,13 @@ const Login=()=>{
     navigate("/dashboard")
     console.log("User saved: ",userData);
   };
+
+  useEffect(()=>{
+    const user=getWithExpiry("user");
+    if(user){
+      navigate("/dashboard");
+    }
+  });
 
   return(
     <div className="h-screen flex items-center justify-center">
