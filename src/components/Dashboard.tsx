@@ -9,6 +9,7 @@ const Dashboard=()=>{
   const navigate=useNavigate();
   const {logout}=useAuth();
   const [events,setEvents]=useState<any[]>([]);
+  const [search,setSearch]=useState("");
   
     useEffect(()=>{
       const fetchEvents=async ()=>{
@@ -26,12 +27,17 @@ const Dashboard=()=>{
     logout();
     navigate("/");
   };
+
+  const filteredEvents=events.filter((event)=>event.title.toLowerCase().includes(search.toLowerCase()));
   return (
     <div className="h-screen flex flex-col items-center justify-center gap-4 bg-gray-100">
       <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
       
+      <input type="text" placeholder="Search event..." value={search} onChange={e=>setSearch(e.target.value)} 
+        className="px-4 py-2 border rounded-full w-75 mb-4"
+      />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
-        {events.map((event)=>(
+        {filteredEvents.map((event)=>(
           <div key={event.id} className="bg-gray-300 p-4 rounded shadow hover:shadow-2xl transition duration-300">
             <h2 className="font-bold">{event.title}</h2>
             <p className="text-gray-700 text-[0.85rem]">{event.date}</p>
