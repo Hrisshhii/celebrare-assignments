@@ -1,19 +1,45 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useEffect, useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../utils/firebase";
 
 const Dashboard=()=>{
   const navigate=useNavigate();
-  const {user,logout}=useAuth();
+  const {logout}=useAuth();
+  const [events,setEvents]=useState<any[]>([]);
+  
+    useEffect(()=>{
+      const fetchEvents=async ()=>{
+        const query=await getDocs(collection(db,"events"));
+        const data=query.docs.map((doc)=>({
+          id:doc.id,
+          ...doc.data(),
+        }));
+        setEvents(data);
+      };
+      fetchEvents();
+    },[]);
 
   const handleLogout=()=>{
     logout();
     navigate("/");
   };
   return (
-    <div className="h-screen flex flex-col items-center justify-center gap-4">
+    <div className="h-screen flex flex-col items-center justify-center gap-4 bg-gray-100">
       <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
-      <p className="text-lg">{user?.name}</p>
-      <p className="text-gray-400">{user?.email}</p>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+        {events.map((event)=>(
+          <div key={event.id} className="bg-gray-300 p-4 rounded shadow hover:shadow-2xl transition duration-300">
+            <h2 className="font-bold">{event.title}</h2>
+            <p className="text-gray-700 text-[0.85rem]">{event.date}</p>
+            <p>{event.location}</p>
+          </div>
+        ))}
+      </div>
+
       <button onClick={handleLogout} 
         className="bg-linear-to-r from-red-500 to-red-700 hover:scale-110 hover:opacity-60 transition duration-300 px-4 py-2 rounded text-white cursor-pointer">
           Logout
