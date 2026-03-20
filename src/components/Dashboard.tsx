@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
-import { getWithExpiry } from "../utils/storage"
+import { useAuth } from "../context/AuthContext";
 
 const Dashboard=()=>{
-  const user=getWithExpiry("user");
   const navigate=useNavigate();
+  const {user,logout}=useAuth();
 
   const handleLogout=()=>{
-    localStorage.removeItem("user");
+    logout();
     navigate("/");
   };
   return (
