@@ -12,15 +12,18 @@ const Dashboard=()=>{
   const [events,setEvents]=useState<any[]>([]);
   const [search,setSearch]=useState("");
   const [selectedEvent,setSelectedEvent]=useState<string|null>(null);
+  const [loading,setLoading]=useState(true);
   
   useEffect(()=>{
     const fetchEvents=async ()=>{
+      setLoading(true);
       const query=await getDocs(collection(db,"events"));
       const data=query.docs.map((doc)=>({
         id:doc.id,
         ...doc.data(),
       }));
       setEvents(data);
+      setLoading(false);
     };
     fetchEvents();
   },[]);
@@ -37,6 +40,10 @@ const Dashboard=()=>{
 
   const filteredEvents=events.filter((event)=>event.title.toLowerCase().includes(search.toLowerCase()));
 
+  if(loading){
+    return <div className="h-screen flex justify-center items-center text-gray-700 text-2xl">Loading events...</div>
+  }
+
   return (
     <div className="h-screen flex flex-col items-center justify-center gap-4 bg-gray-100">
       <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
@@ -48,7 +55,7 @@ const Dashboard=()=>{
         {filteredEvents.map((event)=>(
           <div key={event.id} 
             className={`p-4 rounded shadow hover:shadow-2xl transition duration-300 cursor-pointer
-                ${selectedEvent===event.id?"bg-blue-300":"bg-gray-300 "}
+                ${selectedEvent===event.id?"bg-blue-300 border-2 border-blue-500":"bg-gray-300 "}
               `}
             onClick={()=>{
               setSelectedEvent(event.id);
