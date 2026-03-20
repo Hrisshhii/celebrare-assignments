@@ -66,9 +66,9 @@ const Dashboard=()=>{
                 localStorage.setItem("selectedEvent",event.id);
               }}
             >
-              <h2 className="font-bold">{event.title}</h2>
+              <h2 className="font-bold mb-1">{event.title}</h2>
               <p className="text-gray-700 text-[0.85rem]">{event.date}</p>
-              <p>{event.location}</p>
+              <p className="text-gray-700">{event.location}</p>
             </div>
           ))}
         </div>
