@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -10,18 +11,24 @@ const Dashboard=()=>{
   const {logout}=useAuth();
   const [events,setEvents]=useState<any[]>([]);
   const [search,setSearch]=useState("");
+  const [selectedEvent,setSelectedEvent]=useState<string|null>(null);
   
-    useEffect(()=>{
-      const fetchEvents=async ()=>{
-        const query=await getDocs(collection(db,"events"));
-        const data=query.docs.map((doc)=>({
-          id:doc.id,
-          ...doc.data(),
-        }));
-        setEvents(data);
-      };
-      fetchEvents();
-    },[]);
+  useEffect(()=>{
+    const fetchEvents=async ()=>{
+      const query=await getDocs(collection(db,"events"));
+      const data=query.docs.map((doc)=>({
+        id:doc.id,
+        ...doc.data(),
+      }));
+      setEvents(data);
+    };
+    fetchEvents();
+  },[]);
+
+  useEffect(()=>{
+    const saved=localStorage.getItem("selectedEvent");
+    if(saved) setSelectedEvent(saved);
+  },[]);
 
   const handleLogout=()=>{
     logout();
@@ -29,6 +36,7 @@ const Dashboard=()=>{
   };
 
   const filteredEvents=events.filter((event)=>event.title.toLowerCase().includes(search.toLowerCase()));
+
   return (
     <div className="h-screen flex flex-col items-center justify-center gap-4 bg-gray-100">
       <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
@@ -38,7 +46,15 @@ const Dashboard=()=>{
       />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
         {filteredEvents.map((event)=>(
-          <div key={event.id} className="bg-gray-300 p-4 rounded shadow hover:shadow-2xl transition duration-300">
+          <div key={event.id} 
+            className={`p-4 rounded shadow hover:shadow-2xl transition duration-300 cursor-pointer
+                ${selectedEvent===event.id?"bg-blue-300":"bg-gray-300 "}
+              `}
+            onClick={()=>{
+              setSelectedEvent(event.id);
+              localStorage.setItem("selectedEvent",event.id);
+            }}
+          >
             <h2 className="font-bold">{event.title}</h2>
             <p className="text-gray-700 text-[0.85rem]">{event.date}</p>
             <p>{event.location}</p>
