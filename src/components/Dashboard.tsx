@@ -43,7 +43,27 @@ const Dashboard=()=>{
   );
 
   if(loading){
-    return <div className="h-screen flex justify-center items-center text-gray-700 text-2xl">Loading events...</div>
+    return (
+      <div className="min-h-screen bg-gray-100 flex flex-col items-center">
+        <h1 className="text-3xl font-bold mb-4 text-center p-10 opacity-30">
+          Dashboard
+        </h1>
+        <div className="max-w-2xl w-full mx-auto flex flex-col items-center gap-6 px-4">
+
+          <div className="w-full h-10 bg-gray-300 rounded-full animate-pulse"></div>
+
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+            {[...Array(9)].map((_, i) => (
+              <div key={i} className="p-6 rounded shadow-md bg-gray-300 animate-pulse">
+                <div className="h-4 bg-gray-400 rounded w-3/4 mb-2"></div>
+                <div className="h-3 bg-gray-400 rounded w-1/2 mb-1"></div>
+                <div className="h-3 bg-gray-400 rounded w-2/3"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -56,6 +76,11 @@ const Dashboard=()=>{
           className="px-5 py-2 border rounded-full w-full mb-4 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
         <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+
+          {filteredEvents.length === 0 && (
+            <p className="text-gray-500 mt-6">No events Found</p>
+          )}
+
           {filteredEvents.map((event)=>(
             <div key={event.id} 
               className={`p-6 rounded shadow-md hover:shadow-2xl transition duration-300 cursor-pointer
